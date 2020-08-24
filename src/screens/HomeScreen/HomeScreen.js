@@ -98,10 +98,16 @@ export default function HomeScreen(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'lightgrey',
-    padding: 30
+    alignItems: 'center',
+    padding: 30,
+    width: '100%'
+  },
+  formContainer: {
+    flexDirection: 'row',
+    width: '100%',
   },
   input: {
+    flex: 1,
     height: 48,
     borderRadius: 10,
     overflow: 'hidden',
@@ -115,12 +121,27 @@ const styles = StyleSheet.create({
     backgroundColor: '#1cb0f6',
     borderRadius: 10,
     marginVertical: 10,
-    height: 48
+    height: 48,
+    width: 80
   },
   buttonText: {
     color: '#fff',
     fontSize: 16,
     fontWeight: '500',
   },
-
-})
+  listContainer: {
+    marginTop: 10,
+    padding: 16,
+    width: '100%',
+  },
+  entityContainer: {
+    borderBottomColor: '#ddd',
+    borderBottomWidth: 1,
+    marginTop: 12,
+    paddingBottom: 12,
+  },
+  entityText: {
+    fontSize: 16,
+    color: '#333'
+  }
+});
