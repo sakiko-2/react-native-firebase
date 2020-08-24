@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Image, Text, TextInput, TouchableOpacity, StyleSheet, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { firebase } from '../../firebase/config';
 
 export default function LoginScreen({navigation}) {
   const [email, setEmail] = useState('');
@@ -11,7 +12,24 @@ export default function LoginScreen({navigation}) {
   };
 
   const onLoginPress = () => {
-
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password)
+      .then((response) => {
+        const uid = response.user.uid;
+        const userRef = firebase.firestore().collection('users');
+        userRef
+          .doc(uid)
+          .get()
+          .then(firestoreDocument => {
+            if (!firestoreDocument.exists) {
+              alert("User does not exist.");
+              return;
+            }
+          })
+          .catch((error) => alert(error));
+      })
+      .catch((error) => alert(error));
   };
 
   return (

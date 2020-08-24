@@ -1,19 +1,45 @@
 import React, { useState } from 'react';
 import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { firebase } from '../../firebase/config';
 
 export default function RegistrationScreen({navigation}) {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmWPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   const onFooterPress = () => {
     navigation.navigate('Login');
   };
 
   const onRegisterPress = () => {
+    if (password !== confirmPassword) {
+      alert("Password don't match.");
+      return;
+    }
 
+    firebase
+      .auth()
+      .createUserWithEmailAndPassword(email, password)
+      .then((response) => {
+        const uid = response.user.uid;
+        const data = {
+          id: uid,
+          email,
+          fullName,
+        };
+
+        const userRef = firebase.firestore().collection('users');
+        userRef
+          .doc(uid)
+          .set(data)
+          .then(() => {
+            navigation.navigate('Home', {user: data})
+          })
+          .catch((error) => alert(error));
+      })
+      .catch((error) => alert(error));
   };
 
   return (
